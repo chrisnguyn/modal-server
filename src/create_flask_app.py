@@ -7,3 +7,5 @@ def create_flask_app():
     @server.route("/")
     def main():
         return jsonify({"status": "OK"}, 200)
+
+    return server
