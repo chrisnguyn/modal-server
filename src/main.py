@@ -1,13 +1,13 @@
-from modal import Image, Stub, Secret, Volume
+from modal import Image, Secret, Volume, App
 
 from src.create_flask_app import create_flask_app
 
 image = Image.debian_slim().pip_install_from_requirements("requirements.txt")
-stub = Stub("modal-server", image=image)
+app = App("modal-server", image=image)
 secrets = Secret.from_name("modal-server-secrets")
-volume = {"/app": Volume.new()}
+volume = {"/app": Volume.from_name("modal-server-volume")}
 
 
-@stub.function(secrets=[secrets], image=image)
+@app.function(secrets=[secrets], image=image)
 def entrypoint():
     return create_flask_app()
